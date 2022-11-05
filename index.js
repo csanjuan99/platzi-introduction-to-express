@@ -1,5 +1,5 @@
 const express = require('express');
-
+const faker = require('faker');
 const app = express();
 const config = {
   port: 3000,
@@ -14,16 +14,30 @@ app.get('/new-route', (req, res) => {
 });
 
 app.get('/products', (req, res) => {
-  res.json([
-    {
-      id: 1,
-      name: 'Product 1',
-    },
-    {
-      id: 2,
-      name: 'Product 2',
-    }
-  ]);
+  const products = [];
+  const {limit} = req.query;
+  const size = limit || 10;
+  for (let i = 0; i < size; i++) {
+    products.push({
+      id: i + 1,
+      name: faker.commerce.productName(),
+      price: parseInt(faker.commerce.price(), 10),
+      image: faker.image.imageUrl(),
+    });
+  }
+  res.json(products);
+});
+
+app.get('/users', (req, res) => {
+  const {limit, offset} = req.query;
+  if (limit && offset) {
+    res.json({
+      limit,
+      offset,
+    })
+  } else {
+    res.send('No limit or offset provided');
+  }
 });
 
 app.get('/products/:id', (req, res) => {
@@ -41,6 +55,7 @@ app.get('/categories/:categoryId/products/:productsId', (req, res) => {
     productsId: Number(productsId),
   });
 });
+
 
 app.listen(config.port, () => {
   console.log(`Server is running on localhost:${config.port}`);
