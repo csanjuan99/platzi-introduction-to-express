@@ -1,58 +1,39 @@
 const express = require('express');
-const faker = require("faker");
 const router = express.Router(); // not access to app, but access to router
+const ProductsServices = require('../services/products.service');
+
+const service = new ProductsServices();
 
 router.post('/', (req, res) => {
-  const body = req.body;
-  res.status(201).json({
-    data: body
-  });
+  const {body} = req;
+  const product = service.create(body);
+  res.status(201).json(product);
 });
 
 router.get('/', (req, res) => {
-  const products = [];
-  const {limit} = req.query;
-  const size = limit || 10;
-  for (let i = 0; i < size; i++) {
-    products.push({
-      id: i + 1,
-      name: faker.commerce.productName(),
-      price: parseInt(faker.commerce.price(), 10),
-      image: faker.image.imageUrl(),
-    });
-  }
-  res.json(products);
+  const products = service.find();
+  res.status(200).json({
+    data: products
+  });
 });
 
 router.get('/:id', (req, res) => {
   const {id} = req.params;
-  res.json({
-    id: Number(id),
-    name: `Product ${id}`,
-  });
+  const product = service.findOne(id);
+  res.status(200).json(product);
 });
 
 router.put('/:id', (req, res) => {
   const {id} = req.params;
   const {body} = req;
-  res.json({
-    data: {
-      id: Number(id),
-      ...body
-    },
-    message: 'Product updated'
-  });
+  const product = service.update(id, body);
+  res.status(200).json(product);
 });
 
 router.delete('/:id', (req, res) => {
   const {id} = req.params;
-  res.json({
-    data: {
-      id: Number(id),
-      name: `Product ${id}`,
-    },
-    message: 'Product deleted'
-  });
+  const product = service.delete(id);
+  res.status(200).json(product);
 });
 
 module.exports = router;
