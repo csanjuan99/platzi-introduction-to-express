@@ -4,7 +4,7 @@ const router = express.Router(); // not access to app, but access to router
 
 router.post('/', (req, res) => {
   const body = req.body;
-  res.json({
+  res.status(201).json({
     data: body
   });
 });
