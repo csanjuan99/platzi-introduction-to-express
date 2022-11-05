@@ -9,7 +9,6 @@ router.post('/', (req, res) => {
   });
 });
 
-
 router.get('/', (req, res) => {
   const products = [];
   const {limit} = req.query;
@@ -33,5 +32,27 @@ router.get('/:id', (req, res) => {
   });
 });
 
+router.put('/:id', (req, res) => {
+  const {id} = req.params;
+  const {body} = req;
+  res.json({
+    data: {
+      id: Number(id),
+      ...body
+    },
+    message: 'Product updated'
+  });
+});
+
+router.delete('/:id', (req, res) => {
+  const {id} = req.params;
+  res.json({
+    data: {
+      id: Number(id),
+      name: `Product ${id}`,
+    },
+    message: 'Product deleted'
+  });
+});
 
 module.exports = router;
