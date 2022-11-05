@@ -2,6 +2,14 @@ const express = require('express');
 const faker = require("faker");
 const router = express.Router(); // not access to app, but access to router
 
+router.post('/', (req, res) => {
+  const body = req.body;
+  res.json({
+    data: body
+  });
+});
+
+
 router.get('/', (req, res) => {
   const products = [];
   const {limit} = req.query;

@@ -1,11 +1,14 @@
+const express = require('express');
 const productsRouter = require('./products.router');
 const userRouter = require('./user.router');
 const categoriesRouter = require('./categories.router');
 
 function api(app) {
-  app.use('/products', productsRouter);
-  app.use('/users', userRouter);
-  app.use('/categories', categoriesRouter);
+  const router = express.Router();
+  router.use('/products', productsRouter);
+  router.use('/users', userRouter);
+  router.use('/categories', categoriesRouter);
+  app.use('/api/v1', router)
 }
 
 module.exports = api;
