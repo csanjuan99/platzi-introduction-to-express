@@ -19,26 +19,31 @@ class ProductsService {
     }
   }
 
-  create(product) {
+  async create(product) {
     this.products.push(product);
   }
 
-  find() {
-    return this.products;
+  async find() {
+    return new Promise((resolve, reject) =>
+      setTimeout(() => resolve(this.products), 1000)
+    );
   }
 
-  findOne(id) {
+  async findOne(id) {
     return this.products.find(item => item.id === parseInt(id));
   }
 
-  update(id, product) {
+  async update(id, product) {
     const index = this.products.findIndex(item => item.id === parseInt(id));
     this.products[index] = product;
     return this.products[index];
   }
 
-  delete(id) {
+  async delete(id) {
     const index = this.products.findIndex(item => item.id === parseInt(id));
+    if (index === -1) {
+      throw new Error("Product not found");
+    }
     return this.products.splice(index, 1);
   }
 }
